@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="js/vue.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="sample">
+        <form v-show="!showTable">
+          <div class="form-group" v-for="(field, i) in fields">
+            <label>{{field.title}}</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="field.value"
+              @input="validate"
+            />
+            <!-- <span>{{field.value}}</span> -->
+          </div>
+
+          <div class="form-group">
+            <label>Guests</label>
+            <input type="button" class="btn btn-primary" value="+" />
+          </div>
+          <div class="form-group">Guest 1 ....</div>
+          <hr />
+          <button
+            class="btn btn-success"
+            v-bind:disabled="isDisabled"
+            @click.stop.prevent="showTable = true"
+          >
+            Send Data
+          </button>
+        </form>
+        <div v-show="showTable">
+          <h2>All done!</h2>
+          <table class="table table-bordered">
+            <tr>
+              <td>Email</td>
+              <td>{{fields[0].value}}</td>
+            </tr>
+            <tr>
+              <td>Phone</td>
+              <td>{{fields[1].value}}</td>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td>{{fullName}}</td>
+            </tr>
+            <tr>
+              <td>Guests</td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script>
+      Vue.createApp({
+        data: () => ({
+          fields: [
+            {
+              title: "Email",
+              value: "",
+            },
+            {
+              title: "Phone",
+              value: "",
+            },
+            {
+              title: "First name",
+              value: "",
+            },
+            {
+              title: "Last name",
+              value: "",
+            },
+          ],
+          showTable: false,
+          isDisabled: true,
+        }),
+        computed: {
+          fullName() {
+            return `${this.fields[2].value} ${this.fields[3].value}`;
+          },
+          validate() {
+            console.log(this.isDisabled);
+            if (
+              this.fields.filter((el) => el.value.length > 0).length ===
+              this.fields.length
+            ) {
+              console.log(2);
+              this.isDisabled = false;
+            }
+          },
+        },
+      }).mount(".sample");
+    </script>
+  </body>
+</html>
